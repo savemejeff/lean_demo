@@ -25,6 +25,8 @@ router.post('/', upload.array(), function(req, res, next) {
     var data = new Data();
     data.set('Key', key);
     data.set('Value', value);
+    res.send(req.body);
+    res.end();
     data.save();
     res.end();
 })
