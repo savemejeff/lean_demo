@@ -1,6 +1,9 @@
 'use strict';
 var router = require('express').Router();
 var AV = require('leanengine');
+const bodyParser = require('body-parser')
+const multer = require('multer') // v1.0.5
+const upload = multer()
 
 var Data = AV.Object.extend('Data');
 router.get('/', function(req, res, next) {
@@ -8,16 +11,15 @@ router.get('/', function(req, res, next) {
     var query = new AV.Query(Data);
     query.equalTo('Key', key);
     query.first().then(result => {
-        if (result == null) {
-            res.send(null);
-        } else {
+        if (result) {
             res.send(result.get('Value'));
         }
-    })
-    res.end();
+    }).finally(() => {
+        res.end();
+    });
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', upload.array(), function(req, res, next) {
     var key = req.body.key;
     var value = req.body.value;
     var data = new Data();
