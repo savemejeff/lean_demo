@@ -6,11 +6,12 @@ var Data = AV.Object.extend('Data');
 router.get('/', function(req, res, next) {
     var key = req.query.key;
     var query = new AV.Query(Data);
-    query.first(d => d.Key == key).then(result => {
+    query.equalTo('Key', key);
+    query.first().then(result => {
         if (result == null) {
             res.send(null);
         } else {
-            res.send(result.Value);
+            res.send(result.get('Value'));
         }
     })
     res.end();
