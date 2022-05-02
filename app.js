@@ -40,6 +40,7 @@ app.get('/', function(req, res) {
 
 // You can store routings in multiple files according to their categories.
 app.use('/todos', require('./routes/todos'));
+app.use('/data', require('./routes/data'));
 
 app.use(function(req, res, next) {
   // If there is no routing answering, throw a 404 exception to exception handlers.
