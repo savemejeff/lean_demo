@@ -22,13 +22,22 @@ router.get('/', function(req, res, next) {
 router.post('/', upload.array(), function(req, res, next) {
     var key = req.body.key;
     var value = req.body.value;
-    var data = new Data();
-    data.set('Key', key);
-    data.set('Value', value);
-    res.send(req.body);
-    res.end();
-    data.save();
-    res.end();
+    var query = new AV.Query(Data);
+    query.equalTo('Key', key);
+    query.first().then(result => {
+        if (result) {
+            var oldValue = result.get('Value');
+            res.send(oldValue);
+            result.set('Value', value);
+        } else {
+            result = new Data();
+            result.set('Key', key);
+            result.set('Value', value);
+        }
+        result.save();
+    }).finally(() => {
+        res.end();
+    });
 })
 
 module.exports = router;
