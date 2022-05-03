@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var AV = require('leanengine');
+var cors = require('cors');
 
 // Loads cloud function definitions.
 // You can split it into multiple files but do not forget to load them in the main file.
