@@ -13,6 +13,8 @@ require('./cloud');
 
 var app = express();
 
+// Configures cross origin
+app.use(cors()); 
 // Configures template engine.
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
