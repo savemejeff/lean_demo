@@ -5,6 +5,15 @@ const bodyParser = require('body-parser')
 const multer = require('multer') // v1.0.5
 const upload = multer()
 
+var getHash = (str) => {
+    var hash = 5381, 
+        i = str.length;
+    while (i) {
+        hash = (hash * 33) ^ str.charCodeAt(--i);
+    }
+    return hash >>> 0;
+}
+
 var Data = AV.Object.extend('Data');
 router.get('/', function(req, res, next) {
     var key = req.query.key;
@@ -20,7 +29,9 @@ router.get('/', function(req, res, next) {
 })
 
 router.post('/', upload.array(), function(req, res, next) {
-    var key = req.body.key;
+    console.log(req.headers);
+    console.log(req.body);
+    var key = req.body.key ?? getHash(req.body.value);
     var value = req.body.value;
     var query = new AV.Query(Data);
     query.equalTo('Key', key);
