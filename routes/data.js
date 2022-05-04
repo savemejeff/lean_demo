@@ -29,8 +29,6 @@ router.get('/', function(req, res, next) {
 })
 
 router.post('/', upload.array(), function(req, res, next) {
-    console.log(req.headers);
-    console.log(req.body);
     var key = req.body.key ?? getHash(req.body.value);
     var value = req.body.value;
     var query = new AV.Query(Data);
@@ -46,6 +44,23 @@ router.post('/', upload.array(), function(req, res, next) {
             result.set('Value', value);
         }
         result.save();
+    }).finally(() => {
+        res.end();
+    });
+})
+
+router.get('/keyList', (req, res, next) => {
+    var query = new AV.Query(Data);
+    var skip = req.query.skip;
+    var limit = req.query.limit;
+    query.descending('createdAt');
+    query.skip(+skip);
+    query.limit(+limit);
+    query.find().then(results => {
+        var keyList = results.map(result => {
+            return result.get('Key');
+        });
+        res.send(keyList);
     }).finally(() => {
         res.end();
     });
