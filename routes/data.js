@@ -29,7 +29,10 @@ router.get('/', function(req, res, next) {
 })
 
 router.post('/', upload.array(), function(req, res, next) {
-    var key = req.body.key ?? getHash(req.body.value);
+    var key = req.body.key;
+    if (!key) {
+        key = getHash(req.body.value);
+    }
     var value = req.body.value;
     var query = new AV.Query(Data);
     query.equalTo('Key', key);
